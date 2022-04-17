@@ -3,6 +3,7 @@ import time
 import ccxt
 import threading
 
+import concurrent.futures
 from datetime import datetime
 from Telegram.telegram_bot import MyTelegramBot
 
@@ -13,6 +14,9 @@ def load_json(filepath):
 
 TRACKING_PERCENT = 3
 INTERVAL = '5m'
+
+
+MAX_WORKERS = 2
 
 CONFIG = 'config.json'
 
@@ -85,8 +89,21 @@ def check_pump_dump(exchange, exchange_name, coin, lv1):
 
 def thread_handle_exchange(exchange, exchange_name, all_coins, percent):
     while True:
-        for coin in all_coins:
-            check_pump_dump(exchange, exchange_name, coin, TRACKING_PERCENT)
+        # for coin in all_coins:
+        #     check_pump_dump(exchange, exchange_name, coin, TRACKING_PERCENT)
+        with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+                    futures = []
+                    for coin in all_coins:
+                            futures.append(
+                                executor.submit(
+                                    check_pump_dump, exchange=exchange, exchange_name=exchange_name, coin=coin, lv1=TRACKING_PERCENT
+                                )
+                            )
+                    for future in concurrent.futures.as_completed(futures):
+                        try:
+                            pass
+                        except Exception as e:
+                            print(e)
 
 
 if __name__ == '__main__':
