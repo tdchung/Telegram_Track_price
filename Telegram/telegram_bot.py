@@ -38,7 +38,7 @@ class MyTelegramBot():
         
         if not channels:
             response_str = 'No channel(s) configed'
-        # https://api.telegram.org/bot5046667864:AAEH_FD7MKa4Dwoq5Zuoxk1Mmp76Y62DWUs
+        # https://api.telegram.org/123:qwe
         # /sendMessage?chat_id=@GhoztBinance&parse_mode=HTML&disable_web_page_preview=1&text=
         for channel in channels:
             url = f'{self.URL}/bot{self.token}/sendMessage?text={message}&chat_id={channel}&parse_mode={parse_mode}'
