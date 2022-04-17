@@ -1,0 +1,23 @@
+{
+    "exchanges": {
+        "binance": {
+            "key": "",
+            "secret": "",
+            "testnet": false,
+            "exchangeID": ""
+        },
+        "BinanceFuture": {
+            "key": "",
+            "secret": "",
+            "testnet": false,
+            "exchangeID": ""
+        }
+    },
+    "telegram": {
+        "token": "123456:adsadasd",
+        "channels": [
+            "-1001699233584"
+        ]
+    }
+}
+
