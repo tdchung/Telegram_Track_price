@@ -1,22 +1,40 @@
 {
     "exchanges": {
-        "binance": {
-            "key": "",
-            "secret": "",
+        "Binance": {
+            "key": "qq",
+            "secret": "qq",
             "testnet": false,
-            "exchangeID": ""
+            "exchangeID": "Binance"
         },
         "BinanceFuture": {
-            "key": "",
-            "secret": "",
+            "key": "qqq",
+            "secret": "sss",
             "testnet": false,
-            "exchangeID": ""
+            "exchangeID": "Test123"
+        },
+        "Huobi": {
+            "key": "xx",
+            "secret": "xx",
+            "testnet": false,
+            "exchangeID": "Test Huobi"
+        },
+        "Kucoin": {
+            "key": "xx",
+            "secret": "xx",
+            "testnet": false,
+            "exchangeID": "Test Kucoin"
+        },
+        "FTX": {
+            "key": "xx",
+            "secret": "xx",
+            "testnet": false,
+            "exchangeID": "Test FTX"
         }
     },
     "telegram": {
-        "token": "123456:adsadasd",
+        "token": "123:qwe",
         "channels": [
-            "-1001699233584"
+            "-123"
         ]
     }
 }

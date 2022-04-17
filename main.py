@@ -12,7 +12,7 @@ def load_json(filepath):
     with open(filepath) as json_file:
         return json.load(json_file)
 
-TRACKING_PERCENT = 3
+TRACKING_PERCENT = 2
 INTERVAL = '5m'
 
 
@@ -131,6 +131,38 @@ if __name__ == '__main__':
                         'enableRateLimit': True,
                         'options': {
                             # 'defaultType': 'future',        # future trading
+                            'adjustForTimeDifference': True
+                        }})
+        elif exchange_name == 'Huobi':
+            exchange = ccxt.huobi({
+                        'apiKey': apikey,
+                        'secret': secret,
+                        'enableRateLimit': True,
+                        'options': {
+                            'adjustForTimeDifference': True
+                        }})
+        elif exchange_name == 'MEXC':
+            exchange = ccxt.mexc({
+                        'apiKey': apikey,
+                        'secret': secret,
+                        'enableRateLimit': True,
+                        'options': {
+                            'adjustForTimeDifference': True
+                        }})
+        elif exchange_name == 'Kucoin':
+            exchange = ccxt.kucoin({
+                        'apiKey': apikey,
+                        'secret': secret,
+                        'enableRateLimit': True,
+                        'options': {
+                            'adjustForTimeDifference': True
+                        }})
+        elif exchange_name == 'FTX':
+            exchange = ccxt.ftx({
+                        'apiKey': apikey,
+                        'secret': secret,
+                        'enableRateLimit': True,
+                        'options': {
                             'adjustForTimeDifference': True
                         }})
         else:
