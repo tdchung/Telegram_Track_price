@@ -13,4 +13,9 @@ descriptions:
 ### Telegram channel
 - `https://t.me/exchangestracker`
 
+## run with docker
+1. Build docker images for backend 
+    Go to repo directort: `docker build -t runtelegram .`
+2. Run docker: `docker run -it -p 80:80 runtelegram`
+
 ### more info
