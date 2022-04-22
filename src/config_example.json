@@ -36,6 +36,10 @@
         "channels": [
             "-123"
         ]
+    },
+    "discord": {
+        "token": "",
+        "channel": 123
     }
 }
 

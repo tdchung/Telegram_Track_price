@@ -5,14 +5,15 @@ import threading
 
 import concurrent.futures
 from datetime import datetime
-from Telegram.telegram_bot import MyTelegramBot
+from Libs.telegram_bot import MyTelegramBot
+import Libs.discord_client as discord_client
 
 
 def load_json(filepath):
     with open(filepath) as json_file:
         return json.load(json_file)
 
-TRACKING_PERCENT = 2
+TRACKING_PERCENT = 5
 INTERVAL = '5m'
 
 
@@ -23,20 +24,37 @@ CONFIG = 'config.json'
 config_info = load_json(CONFIG)
 
 TELEGRAM_BOT_API = config_info['telegram']['token']
-CHANNELS = config_info['telegram']['channels']
+TELEGRAM_CHANNELS = config_info['telegram']['channels']
 
-myTelegram = MyTelegramBot(TELEGRAM_BOT_API, CHANNELS)
+
+DISCORD_TOKEN = config_info['discord']['token']
+DISCORD_CHANNEL = config_info['discord']['channel']
+
+
+myTelegram = MyTelegramBot(TELEGRAM_BOT_API, TELEGRAM_CHANNELS)
+
+myDiscordCient = discord_client
+myDiscordCient.init(DISCORD_TOKEN, DISCORD_CHANNEL)
+
+# wait for discord start
+time.sleep(20)
+myDiscordCient.send_message_to_discord("Test 1234 ")
 
 # coin : time
 track_records = {}
 
 
-def get_all_echanges(info):
+def get_all_exchanges(info):
     # global key
     response = []
     for exchange in info:
         response.append(exchange)
     return response
+
+
+def send_message(mydiscord, mytelegram, message):
+    mydiscord.send_message_to_discord(message)
+    myTelegram.send_message(message, parse_mode='HTML', disable_web_page_preview=1)
 
 
 def check_pump_dump(exchange, exchange_name, coin, lv1):
@@ -45,10 +63,11 @@ def check_pump_dump(exchange, exchange_name, coin, lv1):
     try:
         info = exchange.fetch_ohlcv(coin, INTERVAL, limit=1)
     except Exception as e:
-        print(f'error get ohlc, {e}')
+        # print(f'error get ohlc, {e}')
+        pass
     
     if info:
-        print(info)
+        # print(info)
         timestamp = info[0][0]
         open = info[0][1]
         high = info[0][2]
@@ -59,7 +78,8 @@ def check_pump_dump(exchange, exchange_name, coin, lv1):
         print(f"{coin}: {pump}, {dump}")
 
         current = time.time()
-        if timestamp < current*1000 - 10*60:
+        if int(timestamp/1000) < current - 10*60:
+            print(f'Invalid timestamp. delta: {current*1000-timestamp}')
             return
         if open < close and pump > lv1:
             if coin in track_records[exchange_name] and track_records[exchange_name][coin] == timestamp:
@@ -70,8 +90,8 @@ def check_pump_dump(exchange, exchange_name, coin, lv1):
                             f"💰 <b>Percent:</b> {round(dump, 2)}%\n" \
                             f"📌 <b>Price:</b>   ${close}\n" \
                             f"⏰ <b>At:</b> {datetime.utcfromtimestamp(float(timestamp)/1000).strftime('%Y-%m-%d %H:%M:%S')}"
-                print(myTelegram.send_message(message, parse_mode='HTML', disable_web_page_preview=1))
                 track_records[coin] = timestamp
+                send_message(myDiscordCient, myTelegram, message)
         
         elif open > close and dump > lv1:
             if coin in track_records[exchange_name] and track_records[exchange_name][coin] == timestamp:
@@ -82,8 +102,8 @@ def check_pump_dump(exchange, exchange_name, coin, lv1):
                             f"💰 <b>Percent:</b> {round(dump, 2)}%\n" \
                             f"📌 <b>Price:</b>   ${close}\n" \
                             f"⏰ <b>At:</b> {datetime.utcfromtimestamp(float(timestamp)/1000).strftime('%Y-%m-%d %H:%M:%S')}"
-                print(myTelegram.send_message(message, parse_mode='HTML', disable_web_page_preview=1))
                 track_records[coin] = timestamp
+                send_message(myDiscordCient, myTelegram, message)
 
 
 
@@ -106,8 +126,8 @@ def thread_handle_exchange(exchange, exchange_name, all_coins, percent):
                             print(e)
 
 
-if __name__ == '__main__':
-    all_echanges = get_all_echanges(config_info['exchanges'])
+def main():
+    all_echanges = get_all_exchanges(config_info['exchanges'])
 
     for exchange_name in all_echanges:
         track_records[exchange_name] = {}
@@ -170,8 +190,8 @@ if __name__ == '__main__':
 
         if exchange:
             all_coins = exchange.load_markets()
-            for coin in all_coins:
-                print(coin)
+            # for coin in all_coins:
+            #     print(coin)
 
             t = threading.Thread(target=thread_handle_exchange, args=(exchange, exchange_name, all_coins, TRACKING_PERCENT))
             t.daemon = True
@@ -179,3 +199,7 @@ if __name__ == '__main__':
 
     while True:
         time.sleep(10)
+
+
+if __name__ == '__main__':
+    main()

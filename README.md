@@ -1,21 +1,30 @@
-### Telegram Binance Tracker
+## Telegram Binance Tracker
 
 The description for repo: Telegram binance tracker, detect pump and dump and binance future base on OHLC data
 
-### list supported exchanges:
+## list supported exchanges:
  - Binance Future
  - Binance
+ - Huobi
+ - MEXC
+ - Kucoin
+ - FTX
  - `adding...`
 
-### How to run
+## How to run
 descriptions:
 
-### Telegram channel
-- `https://t.me/exchangestracker`
+## Channel
+- Telegram: `https://t.me/exchangestracker`
 
-## run with docker
+## Run with docker
 1. Build docker images for backend 
     Go to repo directort: `docker build -t runtelegram .`
-2. Run docker: `docker run -it -p 80:80 runtelegram`
+2. Run docker: `docker run -it runtelegram`
 
-### more info
+## License
+MIT
+
+## !["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)
+
+```BNB```: `0xf0e9179AA5a981Ec8AfcF828fb98c81E2fdf6691`
