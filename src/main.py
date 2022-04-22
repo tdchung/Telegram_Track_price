@@ -75,7 +75,7 @@ def check_pump_dump(exchange, exchange_name, coin, lv1):
         close = info[0][4]
         pump = ((high-low)/low)*100
         dump = ((high-low)/high)*100
-        print(f"{coin}: {pump}, {dump}")
+        # print(f"{coin}: {pump}, {dump}")
 
         current = time.time()
         if int(timestamp/1000) < current - 10*60:
@@ -86,7 +86,7 @@ def check_pump_dump(exchange, exchange_name, coin, lv1):
                 pass
             else:
                 print(f"{exchange_name}: Pump in {coin} at {timestamp} percent: {dump}")
-                message  =  f"📈 {coin} is Dumping on {exchange_name}!\n" \
+                message  =  f'📈 {coin} is Pumping on <b>{exchange_name}</b>!\n' \
                             f"💰 <b>Percent:</b> {round(dump, 2)}%\n" \
                             f"📌 <b>Price:</b>   ${close}\n" \
                             f"⏰ <b>At:</b> {datetime.utcfromtimestamp(float(timestamp)/1000).strftime('%Y-%m-%d %H:%M:%S')}"
@@ -98,7 +98,7 @@ def check_pump_dump(exchange, exchange_name, coin, lv1):
                 pass
             else:
                 print(f"{exchange_name}: Dump in {coin} at {timestamp} percent: {dump}")
-                message  =  f"📉 {coin} is Pumping on {exchange_name}!\n" \
+                message  =  f'📉 {coin} is Dumping on <b>{exchange_name}</b>!\n' \
                             f"💰 <b>Percent:</b> {round(dump, 2)}%\n" \
                             f"📌 <b>Price:</b>   ${close}\n" \
                             f"⏰ <b>At:</b> {datetime.utcfromtimestamp(float(timestamp)/1000).strftime('%Y-%m-%d %H:%M:%S')}"
