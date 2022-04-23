@@ -53,7 +53,7 @@ def get_all_exchanges(info):
 
 
 def send_message(mydiscord, mytelegram, message):
-    mydiscord.send_message_to_discord(message)
+    mydiscord.send_message_to_discord(message.replace('<b>', '**').replace('</b>', '**'))
     myTelegram.send_message(message, parse_mode='HTML', disable_web_page_preview=1)
 
 
