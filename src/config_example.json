@@ -29,6 +29,12 @@
             "secret": "xx",
             "testnet": false,
             "exchangeID": "Test FTX"
+        },
+        "GateIo": {
+            "key": "xx",
+            "secret": "xx",
+            "testnet": false,
+            "exchangeID": "Test GateIo"
         }
     },
     "telegram": {

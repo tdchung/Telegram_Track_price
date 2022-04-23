@@ -37,8 +37,8 @@ myDiscordCient = discord_client
 myDiscordCient.init(DISCORD_TOKEN, DISCORD_CHANNEL)
 
 # wait for discord start
-time.sleep(20)
-myDiscordCient.send_message_to_discord("Test 1234 ")
+time.sleep(10)
+# myDiscordCient.send_message_to_discord("Test 1234 ")
 
 # coin : time
 track_records = {}
@@ -79,7 +79,7 @@ def check_pump_dump(exchange, exchange_name, coin, lv1):
 
         current = time.time()
         if int(timestamp/1000) < current - 10*60:
-            print(f'Invalid timestamp. delta: {current*1000-timestamp}')
+            # print(f'Invalid timestamp. delta: {current*1000-timestamp}')
             return
         if open < close and pump > lv1:
             if coin in track_records[exchange_name] and track_records[exchange_name][coin] == timestamp:
@@ -130,72 +130,84 @@ def main():
     all_echanges = get_all_exchanges(config_info['exchanges'])
 
     for exchange_name in all_echanges:
-        track_records[exchange_name] = {}
-    
-        apikey = config_info['exchanges'][exchange_name]['key']
-        secret = config_info['exchanges'][exchange_name]['secret']
-        exchange = None
-        if exchange_name == 'BinanceFuture':
-            exchange = ccxt.binance({
-                        'apiKey': apikey,
-                        'secret': secret,
-                        'enableRateLimit': True,
-                        'options': {
-                            'defaultType': 'future',        # future trading
-                            'adjustForTimeDifference': True
-                        }})
-        elif exchange_name == 'Binance':
-            exchange = ccxt.binance({
-                        'apiKey': apikey,
-                        'secret': secret,
-                        'enableRateLimit': True,
-                        'options': {
-                            # 'defaultType': 'future',        # future trading
-                            'adjustForTimeDifference': True
-                        }})
-        elif exchange_name == 'Huobi':
-            exchange = ccxt.huobi({
-                        'apiKey': apikey,
-                        'secret': secret,
-                        'enableRateLimit': True,
-                        'options': {
-                            'adjustForTimeDifference': True
-                        }})
-        elif exchange_name == 'MEXC':
-            exchange = ccxt.mexc({
-                        'apiKey': apikey,
-                        'secret': secret,
-                        'enableRateLimit': True,
-                        'options': {
-                            'adjustForTimeDifference': True
-                        }})
-        elif exchange_name == 'Kucoin':
-            exchange = ccxt.kucoin({
-                        'apiKey': apikey,
-                        'secret': secret,
-                        'enableRateLimit': True,
-                        'options': {
-                            'adjustForTimeDifference': True
-                        }})
-        elif exchange_name == 'FTX':
-            exchange = ccxt.ftx({
-                        'apiKey': apikey,
-                        'secret': secret,
-                        'enableRateLimit': True,
-                        'options': {
-                            'adjustForTimeDifference': True
-                        }})
-        else:
-            print('Not support for this exchange yet')
 
-        if exchange:
-            all_coins = exchange.load_markets()
-            # for coin in all_coins:
-            #     print(coin)
+        try:
+            track_records[exchange_name] = {}
+        
+            apikey = config_info['exchanges'][exchange_name]['key']
+            secret = config_info['exchanges'][exchange_name]['secret']
+            exchange = None
+            if exchange_name == 'BinanceFuture':
+                exchange = ccxt.binance({
+                            'apiKey': apikey,
+                            'secret': secret,
+                            'enableRateLimit': True,
+                            'options': {
+                                'defaultType': 'future',        # future trading
+                                'adjustForTimeDifference': True
+                            }})
+            elif exchange_name == 'Binance':
+                exchange = ccxt.binance({
+                            'apiKey': apikey,
+                            'secret': secret,
+                            'enableRateLimit': True,
+                            'options': {
+                                # 'defaultType': 'future',        # future trading
+                                'adjustForTimeDifference': True
+                            }})
+            elif exchange_name == 'Huobi':
+                exchange = ccxt.huobi({
+                            'apiKey': apikey,
+                            'secret': secret,
+                            'enableRateLimit': True,
+                            'options': {
+                                'adjustForTimeDifference': True
+                            }})
+            elif exchange_name == 'MEXC':
+                exchange = ccxt.mexc({
+                            'apiKey': apikey,
+                            'secret': secret,
+                            'enableRateLimit': True,
+                            'options': {
+                                'adjustForTimeDifference': True
+                            }})
+            elif exchange_name == 'Kucoin':
+                exchange = ccxt.kucoin({
+                            'apiKey': apikey,
+                            'secret': secret,
+                            'enableRateLimit': True,
+                            'options': {
+                                'adjustForTimeDifference': True
+                            }})
+            elif exchange_name == 'FTX':
+                exchange = ccxt.ftx({
+                            'apiKey': apikey,
+                            'secret': secret,
+                            'enableRateLimit': True,
+                            'options': {
+                                'adjustForTimeDifference': True
+                            }})
+            elif exchange_name == 'GateIo':
+                exchange = ccxt.gateio({
+                            'apiKey': apikey,
+                            'secret': secret,
+                            'enableRateLimit': True,
+                            'options': {
+                                'adjustForTimeDifference': True
+                            }})
+            else:
+                print('Not support for this exchange yet')
 
-            t = threading.Thread(target=thread_handle_exchange, args=(exchange, exchange_name, all_coins, TRACKING_PERCENT))
-            t.daemon = True
-            t.start()
+            if exchange:
+                all_coins = exchange.load_markets()
+                # for coin in all_coins:
+                #     print(coin)
+
+                t = threading.Thread(target=thread_handle_exchange, args=(exchange, exchange_name, all_coins, TRACKING_PERCENT))
+                t.daemon = True
+                t.start()
+        except Exception as e:
+            print(f"Error exception: {e}")
 
     while True:
         time.sleep(10)

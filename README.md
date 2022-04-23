@@ -9,6 +9,7 @@ The description for repo: Telegram binance tracker, detect pump and dump and bin
  - MEXC
  - Kucoin
  - FTX
+ - GateIo
  - `adding...`
 
 ## How to run
