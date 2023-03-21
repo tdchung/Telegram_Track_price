@@ -20,8 +20,8 @@ descriptions:
 
 ## Run with docker
 1. Build docker images for backend 
-    Go to repo directort: `docker build -t runtelegram .`
-2. Run docker: `docker run -it runtelegram`
+    Go to repo directort: `sudo docker build -t runtelegram:latest .`
+2. Run docker: `sudo docker run -d --restart=always  runtelegram:latest`
 
 ## License
 MIT

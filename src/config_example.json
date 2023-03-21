@@ -38,9 +38,9 @@
         }
     },
     "telegram": {
-        "token": "123:qwe",
+        "token": "",
         "channels": [
-            "-123"
+            "1661018465"
         ]
     },
     "discord": {
